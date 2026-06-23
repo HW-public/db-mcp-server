@@ -4,7 +4,12 @@
   "description": "MCP server for Oracle and PostgreSQL databases",
   "type": "module",
   "main": "dist/index.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@10.28.1",
   "scripts": {
+    "preinstall": "node -e \"if (!process.env.npm_execpath || !process.env.npm_execpath.includes('pnpm')) { console.error('Please use pnpm to install dependencies.'); process.exit(1); }\"",
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
@@ -21,8 +26,5 @@
     "@types/pg": "^8.15.0",
     "tsx": "^4.19.0",
     "typescript": "^5.8.0"
-  },
-  "engines": {
-    "node": ">=20.0.0"
   }
 }

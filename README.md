@@ -25,11 +25,15 @@
 
 ## 安装
 
+本项目强制使用 [pnpm](https://pnpm.io/) 管理依赖。
+
 ```powershell
 cd C:\Users\ASUS\db-mcp-server
-npm install
-npm run build
+pnpm install
+pnpm run build
 ```
+
+如果你用 `npm install` 或 `yarn install`，`preinstall` 脚本会报错并阻止安装。
 
 ## 配置
 
@@ -105,7 +109,7 @@ claude
 ## 构建与运行
 
 ```powershell
-npm run build
+pnpm run build
 node dist/index.js
 ```
 
@@ -114,7 +118,7 @@ node dist/index.js
 无需编译，直接使用 `tsx` 运行：
 
 ```powershell
-npx tsx src/index.ts
+pnpm tsx src/index.ts
 ```
 
 ## Oracle Thick 模式

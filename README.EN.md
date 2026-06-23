@@ -23,11 +23,15 @@ Each tool accepts an optional `dataSource` argument (`"oracle"` or `"postgres"`)
 
 ## Installation
 
+This project requires [pnpm](https://pnpm.io/) for dependency management.
+
 ```powershell
 cd C:\Users\ASUS\db-mcp-server
-npm install
-npm run build
+pnpm install
+pnpm run build
 ```
+
+Running `npm install` or `yarn install` will be blocked by the `preinstall` script.
 
 ## Configuration
 
@@ -103,7 +107,7 @@ Restart Claude Code after changing environment variables, `.mcp.json`, or rebuil
 ## Build and Run
 
 ```powershell
-npm run build
+pnpm run build
 node dist/index.js
 ```
 
@@ -112,7 +116,7 @@ node dist/index.js
 Run directly with `tsx` without compiling:
 
 ```powershell
-npx tsx src/index.ts
+pnpm tsx src/index.ts
 ```
 
 ## Oracle Thick Mode

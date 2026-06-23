@@ -23,8 +23,8 @@ const tools: Tool[] = [
         },
         dataSource: {
           type: 'string',
-          enum: ['oracle', 'postgres'],
-          description: 'Database to query. Required when both are configured.',
+          enum: ['oracle', 'postgres', 'mysql'],
+          description: 'Database to query. Required when multiple databases are configured.',
         },
       },
     },
@@ -46,8 +46,8 @@ const tools: Tool[] = [
         },
         dataSource: {
           type: 'string',
-          enum: ['oracle', 'postgres'],
-          description: 'Database to query. Required when both are configured.',
+          enum: ['oracle', 'postgres', 'mysql'],
+          description: 'Database to query. Required when multiple databases are configured.',
         },
       },
       required: ['table_name'],
@@ -65,8 +65,8 @@ const tools: Tool[] = [
         },
         dataSource: {
           type: 'string',
-          enum: ['oracle', 'postgres'],
-          description: 'Database to query. Required when both are configured.',
+          enum: ['oracle', 'postgres', 'mysql'],
+          description: 'Database to query. Required when multiple databases are configured.',
         },
       },
       required: ['sql'],
@@ -95,7 +95,7 @@ const tools: Tool[] = [
 
 export function createServer(
   config: Config,
-  dbMap: Map<'oracle' | 'postgres', DBConnection>
+  dbMap: Map<'oracle' | 'postgres' | 'mysql', DBConnection>
 ): Server {
   const server = new Server(
     {
@@ -113,11 +113,12 @@ export function createServer(
     const source = (dataSource ?? config.defaultDataSource) as
       | 'oracle'
       | 'postgres'
+      | 'mysql'
       | undefined;
 
     if (!source) {
       throw new Error(
-        'dataSource is required when both Oracle and PostgreSQL are configured.'
+        'dataSource is required when multiple databases are configured.'
       );
     }
 

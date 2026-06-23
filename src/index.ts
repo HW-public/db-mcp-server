@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { loadConfig } from './config.js';
+import { MysqlDB } from './db/mysql.js';
 import { OracleDB } from './db/oracle.js';
 import { PostgresDB } from './db/postgres.js';
 import type { DBConnection } from './db/types.js';
@@ -9,7 +10,7 @@ import { createServer } from './server.js';
 async function main(): Promise<void> {
   const config = loadConfig();
 
-  const dbMap = new Map<'oracle' | 'postgres', DBConnection>();
+  const dbMap = new Map<'oracle' | 'postgres' | 'mysql', DBConnection>();
 
   if (config.oracle) {
     const oracle = new OracleDB(config.oracle);
@@ -23,6 +24,13 @@ async function main(): Promise<void> {
     await postgres.connect();
     dbMap.set('postgres', postgres);
     console.error('PostgreSQL connected');
+  }
+
+  if (config.mysql) {
+    const mysql = new MysqlDB(config.mysql);
+    await mysql.connect();
+    dbMap.set('mysql', mysql);
+    console.error('MySQL connected');
   }
 
   const server = createServer(config, dbMap);

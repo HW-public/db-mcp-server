@@ -1,20 +1,21 @@
 # DB MCP Server
 
-A [Model Context Protocol](https://modelcontextprotocol.io/) server written in TypeScript that lets Claude Code interact with **Oracle** and **PostgreSQL** databases.
+A [Model Context Protocol](https://modelcontextprotocol.io/) server written in TypeScript that lets Claude Code interact with **Oracle**, **PostgreSQL**, and **MySQL** databases.
 
 ## Supported Databases
 
 - Oracle (via `oracledb`, thin mode by default)
 - PostgreSQL (via `pg`)
+- MySQL (via `mysql2`)
 
 ## Tools
 
-- `list_tables`: list tables in a schema
+- `list_tables`: list tables in a schema / database
 - `describe_table`: show columns, types, and constraints
 - `execute_query`: run read-only `SELECT` queries
 - `execute_dml`: run `INSERT`/`UPDATE`/`DELETE`/`DDL` statements
 
-Each tool accepts an optional `dataSource` argument (`"oracle"` or `"postgres"`). If only one database is configured, it is used by default.
+Each tool accepts an optional `dataSource` argument (`"oracle"`, `"postgres"`, or `"mysql"`). If only one database is configured, it is used by default.
 
 ## Requirements
 
@@ -56,6 +57,13 @@ POSTGRES_PORT=5432
 POSTGRES_USER=your_user
 POSTGRES_PASSWORD=your_password
 POSTGRES_DATABASE=your_db
+
+# MySQL
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=your_user
+MYSQL_PASSWORD=your_password
+MYSQL_DATABASE=your_db
 ```
 
 Or set them in PowerShell before starting Claude Code:
@@ -70,6 +78,12 @@ $env:POSTGRES_PORT = "5432"
 $env:POSTGRES_USER = "your_user"
 $env:POSTGRES_PASSWORD = "your_password"
 $env:POSTGRES_DATABASE = "your_db"
+
+$env:MYSQL_HOST = "localhost"
+$env:MYSQL_PORT = "3306"
+$env:MYSQL_USER = "your_user"
+$env:MYSQL_PASSWORD = "your_password"
+$env:MYSQL_DATABASE = "your_db"
 
 claude
 ```
@@ -134,5 +148,8 @@ After restarting Claude Code, try:
 
 - "List Oracle tables"
 - "List PostgreSQL tables"
+- "List MySQL tables"
 - "Describe table users from postgres"
+- "Describe table users from mysql"
 - "Run SELECT * FROM employees on oracle"
+- "Run SELECT * FROM users on mysql"

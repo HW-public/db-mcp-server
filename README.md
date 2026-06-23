@@ -2,21 +2,22 @@
 
 [English](README.EN.md) | 中文
 
-一个基于 TypeScript 实现的 [Model Context Protocol](https://modelcontextprotocol.io/) 服务，让 Claude Code 可以直接查询 **Oracle** 和 **PostgreSQL** 数据库。
+一个基于 TypeScript 实现的 [Model Context Protocol](https://modelcontextprotocol.io/) 服务，让 Claude Code 可以直接查询 **Oracle**、**PostgreSQL** 和 **MySQL** 数据库。
 
 ## 支持的数据库
 
 - Oracle（通过 `oracledb` 驱动，默认 thin 模式）
 - PostgreSQL（通过 `pg` 驱动）
+- MySQL（通过 `mysql2` 驱动）
 
 ## 提供的工具
 
-- `list_tables`：列出指定 schema 下的表
+- `list_tables`：列出指定 schema / 数据库下的表
 - `describe_table`：查看表结构、字段类型和约束
 - `execute_query`：执行只读的 `SELECT` 查询
 - `execute_dml`：执行 `INSERT`/`UPDATE`/`DELETE`/`DDL` 语句
 
-每个工具都支持可选参数 `dataSource`（`"oracle"` 或 `"postgres"`）。如果只配置了一种数据库，会默认使用该数据库。
+每个工具都支持可选参数 `dataSource`（`"oracle"`、`"postgres"` 或 `"mysql"`）。如果只配置了一种数据库，会默认使用该数据库。
 
 ## 环境要求
 
@@ -58,6 +59,13 @@ POSTGRES_PORT=5432
 POSTGRES_USER=your_user
 POSTGRES_PASSWORD=your_password
 POSTGRES_DATABASE=your_db
+
+# MySQL 配置
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=your_user
+MYSQL_PASSWORD=your_password
+MYSQL_DATABASE=your_db
 ```
 
 也可以在启动 Claude Code 前用 PowerShell 设置：
@@ -72,6 +80,12 @@ $env:POSTGRES_PORT = "5432"
 $env:POSTGRES_USER = "your_user"
 $env:POSTGRES_PASSWORD = "your_password"
 $env:POSTGRES_DATABASE = "your_db"
+
+$env:MYSQL_HOST = "localhost"
+$env:MYSQL_PORT = "3306"
+$env:MYSQL_USER = "your_user"
+$env:MYSQL_PASSWORD = "your_password"
+$env:MYSQL_DATABASE = "your_db"
 
 claude
 ```
@@ -136,5 +150,8 @@ $env:ORACLE_LIB_DIR = "C:\Users\ASUS\Desktop\instantclient_19_28"
 
 - "列出 Oracle 的表"
 - "列出 PostgreSQL 的表"
+- "列出 MySQL 的表"
 - "描述 postgres 中的 users 表"
+- "描述 mysql 中的 users 表"
 - "在 oracle 上执行 SELECT * FROM employees"
+- "在 mysql 上执行 SELECT * FROM users"

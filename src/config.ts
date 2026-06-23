@@ -15,10 +15,19 @@ export interface PostgresConfig {
   database?: string;
 }
 
+export interface MysqlConfig {
+  host: string;
+  port: number;
+  user: string;
+  password: string;
+  database?: string;
+}
+
 export interface Config {
   oracle?: OracleConfig;
   postgres?: PostgresConfig;
-  defaultDataSource?: 'oracle' | 'postgres';
+  mysql?: MysqlConfig;
+  defaultDataSource?: 'oracle' | 'postgres' | 'mysql';
 }
 
 function getEnv(name: string): string | undefined {
@@ -63,17 +72,34 @@ export function loadConfig(): Config {
     };
   }
 
-  if (!config.oracle && !config.postgres) {
+  const mysqlHost = getEnv('MYSQL_HOST');
+  const mysqlUser = getEnv('MYSQL_USER');
+  const mysqlPassword = getEnv('MYSQL_PASSWORD');
+
+  if (mysqlHost && mysqlUser && mysqlPassword) {
+    config.mysql = {
+      host: mysqlHost,
+      port: parseIntSafe(getEnv('MYSQL_PORT'), 3306),
+      user: mysqlUser,
+      password: mysqlPassword,
+      database: getEnv('MYSQL_DATABASE'),
+    };
+  }
+
+  if (!config.oracle && !config.postgres && !config.mysql) {
     throw new Error(
-      'No database configured. Set Oracle env vars (ORACLE_USER, ORACLE_PASSWORD, ORACLE_DSN) ' +
-        'and/or PostgreSQL env vars (POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD).'
+      'No database configured. Set Oracle env vars (ORACLE_USER, ORACLE_PASSWORD, ORACLE_DSN), ' +
+        'PostgreSQL env vars (POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD), ' +
+        'and/or MySQL env vars (MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD).'
     );
   }
 
-  if (config.oracle && !config.postgres) {
+  if (config.oracle && !config.postgres && !config.mysql) {
     config.defaultDataSource = 'oracle';
-  } else if (config.postgres && !config.oracle) {
+  } else if (config.postgres && !config.oracle && !config.mysql) {
     config.defaultDataSource = 'postgres';
+  } else if (config.mysql && !config.oracle && !config.postgres) {
+    config.defaultDataSource = 'mysql';
   }
 
   return config;

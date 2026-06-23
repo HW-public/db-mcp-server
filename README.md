@@ -33,15 +33,36 @@ npm run build
 
 ## 配置
 
-在启动 Claude Code 之前设置环境变量：
+### 1. 环境变量 / `.env` 文件
+
+支持两种配置方式，优先级如下：
+
+1. **系统环境变量**（最高优先级）
+2. 项目根目录下的 **`.env` 文件**
+
+示例 `.env`：
+
+```env
+# Oracle 配置
+ORACLE_USER=your_user
+ORACLE_PASSWORD=your_password
+ORACLE_DSN=localhost:1521/ORCLPDB1
+
+# PostgreSQL 配置
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=your_user
+POSTGRES_PASSWORD=your_password
+POSTGRES_DATABASE=your_db
+```
+
+也可以在启动 Claude Code 前用 PowerShell 设置：
 
 ```powershell
-# Oracle 配置
 $env:ORACLE_USER = "your_user"
 $env:ORACLE_PASSWORD = "your_password"
 $env:ORACLE_DSN = "localhost:1521/ORCLPDB1"
 
-# PostgreSQL 配置
 $env:POSTGRES_HOST = "localhost"
 $env:POSTGRES_PORT = "5432"
 $env:POSTGRES_USER = "your_user"
@@ -51,11 +72,35 @@ $env:POSTGRES_DATABASE = "your_db"
 claude
 ```
 
-## Claude Code 集成
+### 2. 在 Claude Code 中注册 MCP Server
 
-该服务已在 `C:\Users\ASUS\.mcp.json` 中注册为 `db-mcp-server`，并在 `C:\Users\ASUS\.claude\settings.local.json` 中启用。
+在 `C:\Users\ASUS\.mcp.json` 中添加：
 
-修改环境变量或重新构建后，请重启 Claude Code。
+```json
+{
+  "mcpServers": {
+    "db-mcp-server": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "cd /d C:\\Users\\ASUS\\db-mcp-server && node dist\\index.js"
+      ]
+    }
+  }
+}
+```
+
+在 `C:\Users\ASUS\.claude\settings.local.json` 中启用：
+
+```json
+{
+  "enabledMcpjsonServers": [
+    "db-mcp-server"
+  ]
+}
+```
+
+修改环境变量、`.mcp.json` 或重新构建后，请**重启 Claude Code** 使配置生效。
 
 ## 构建与运行
 

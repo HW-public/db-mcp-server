@@ -31,15 +31,36 @@ npm run build
 
 ## Configuration
 
-Set environment variables before starting Claude Code:
+### 1. Environment Variables / `.env` File
+
+Configuration is loaded in the following priority order:
+
+1. **System environment variables** (highest priority)
+2. **`.env` file** in the project root
+
+Example `.env`:
+
+```env
+# Oracle
+ORACLE_USER=your_user
+ORACLE_PASSWORD=your_password
+ORACLE_DSN=localhost:1521/ORCLPDB1
+
+# PostgreSQL
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=your_user
+POSTGRES_PASSWORD=your_password
+POSTGRES_DATABASE=your_db
+```
+
+Or set them in PowerShell before starting Claude Code:
 
 ```powershell
-# Oracle
 $env:ORACLE_USER = "your_user"
 $env:ORACLE_PASSWORD = "your_password"
 $env:ORACLE_DSN = "localhost:1521/ORCLPDB1"
 
-# PostgreSQL
 $env:POSTGRES_HOST = "localhost"
 $env:POSTGRES_PORT = "5432"
 $env:POSTGRES_USER = "your_user"
@@ -49,11 +70,35 @@ $env:POSTGRES_DATABASE = "your_db"
 claude
 ```
 
-## Claude Code Integration
+### 2. Register the MCP Server in Claude Code
 
-The server is registered in `C:\Users\ASUS\.mcp.json` as `db-mcp-server` and enabled in `C:\Users\ASUS\.claude\settings.local.json`.
+Add the server to `C:\Users\ASUS\.mcp.json`:
 
-Restart Claude Code after changing environment variables or rebuilding.
+```json
+{
+  "mcpServers": {
+    "db-mcp-server": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "cd /d C:\\Users\\ASUS\\db-mcp-server && node dist\\index.js"
+      ]
+    }
+  }
+}
+```
+
+Enable it in `C:\Users\ASUS\.claude\settings.local.json`:
+
+```json
+{
+  "enabledMcpjsonServers": [
+    "db-mcp-server"
+  ]
+}
+```
+
+Restart Claude Code after changing environment variables, `.mcp.json`, or rebuilding.
 
 ## Build and Run
 
